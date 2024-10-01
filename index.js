@@ -21,16 +21,17 @@ const connectDB = async () => {
     console.error("Database connection error:", err);
   }
 };
-//middlewares
-dotenv.config();
-app.use(express.json());
-app.use(cookieParser());
 app.use(
   cors({
     origin: true,
     credentials: true,
   })
 );
+//middlewares
+dotenv.config();
+app.use(express.json());
+app.use(cookieParser());
+
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);

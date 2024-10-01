@@ -8,3 +8,8 @@ dist-ssr
 !.vscode/extensions.json
 .idea
 .env
+.vercel
+.vercel.json
+
+# Local Netlify folder
+.netlify
