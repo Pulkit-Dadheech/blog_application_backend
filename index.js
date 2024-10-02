@@ -71,10 +71,10 @@ app.post("/api/upload",upload.single('file'),async (req,res)=>{
 
     const cloudinaryResult = await uploadOnCloudinary(localFilePath);
 
-    if(cloudinaryResult && cloudinaryResult.url){
+    if(cloudinaryResult && cloudinaryResult.secure_url){
       return res.status(200).json({
         message: "File has been uploaded successfully to Cloudinary!",
-        cloudinaryUrl: cloudinaryResult.url,
+        cloudinaryUrl: cloudinaryResult.secure_url,
         publicId: cloudinaryResult.public_id,
       });
     } 
@@ -125,7 +125,7 @@ app.put('/api/update',upload.single('file'),async(req,res)=>{
     
     return res.status(200).json({
       message: "Media updated successfully",
-      cloudinaryUrl: newMedia.url,
+      cloudinaryUrl: newMedia.secure_url,
       publicId: newMedia.public_id,
     });
   } 
