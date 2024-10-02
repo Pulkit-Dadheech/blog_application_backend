@@ -60,14 +60,11 @@ router.post("/login", async (req, res) => {
 
 router.get("/logout", async (req, res) => {
   try {
-    app.post('/logout', (req, res) => {
-        
-      res.clearCookie("token", {
-        httpOnly: true,      
-        secure: true,      
-        sameSite: 'None'
-      }).status(200).send("User logged out successfully!");
-    });
+    res.clearCookie("token", {
+      httpOnly: true,      
+      secure: true,      
+      sameSite: 'None'
+    }).status(200).send("User logged out successfully!");
   } catch (e) {
     res.status(500).json(e);
   }
