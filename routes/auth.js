@@ -43,12 +43,10 @@ router.post("/login", async (req, res) => {
       }
     );
     const { password, ...info } = user._doc;
-    const isProd = process.env.NODE_ENV === 'production';
-
-
+    
     res.cookie("token", token, {
       httpOnly: true,    
-      secure: isProd,  
+      secure: true,  
       sameSite: 'None', 
       maxAge: 3 * 24 * 60 * 60 * 1000 
     });
@@ -63,12 +61,10 @@ router.post("/login", async (req, res) => {
 router.get("/logout", async (req, res) => {
   try {
     app.post('/logout', (req, res) => {
-      
-      const isProd = process.env.NODE_ENV === 'production';
         
       res.clearCookie("token", {
         httpOnly: true,      
-        secure: isProd,      
+        secure: true,      
         sameSite: 'None'
       }).status(200).send("User logged out successfully!");
     });

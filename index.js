@@ -23,7 +23,7 @@ const connectDB = async () => {
 };
 app.use(
   cors({
-    origin: true,
+    origin: 'https://blog-application-frontend-ashy.vercel.app',
     credentials: true,
   })
 );
