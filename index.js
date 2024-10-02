@@ -96,15 +96,25 @@ app.delete('/api/delete-file', async (req, res) => {
   const { publicId } = req.body;
 
   try {
-    const result = await cloudinary.uploader.destroy(publicId, {
-      resource_type: "image",  
+    const resource = await cloudinary.api.resource(publicId, {
+      resource_type: "image",
     });
 
-    if (result.result === 'ok') {
-      return res.status(200).json({ message: 'File deleted successfully!' });
-    } else {
-      return res.status(500).json({ message: 'Failed to delete file' });
+    if(resource){
+      const result = await cloudinary.uploader.destroy(publicId, {
+        resource_type: "image",  
+      });
+  
+      if (result.result === 'ok') {
+        return res.status(200).json({ message: 'File deleted successfully!' });
+      } else {
+        return res.status(500).json({ message: 'Failed to delete file' });
+      }
     }
+    else{
+      return res.status(404).json({message: "File not found"});
+    }
+    
   } catch (error) {
     return res.status(500).json({ message: 'Error deleting file', error: error.message });
   }
@@ -112,15 +122,21 @@ app.delete('/api/delete-file', async (req, res) => {
 
 app.put('/api/update',upload.single('file'),async(req,res)=>{
   try{
-    const {oldPublicId} = req.body;
-    const deleteSuccess = await deleteFromCloudinary(oldPublicId);
-    if (!deleteSuccess) {
-      return res.status(500).json({ message: "Failed to delete old media" });
+    const resource = await cloudinary.api.resource(publicId, {
+      resource_type: "image",
+    });
+
+    if(resource){
+      const {oldPublicId} = req.body;
+      const deleteSuccess = await deleteFromCloudinary(oldPublicId);
+      if (!deleteSuccess) {
+        return res.status(500).json({ message: "Failed to delete old media" });
+      }
     }
+    
 
     const localFilePath = req.file.path; 
     const newMedia = await uploadOnCloudinary(localFilePath);
-    console.log(newMedia);
     if(!newMedia) return res.status(500).json({message: "Failed to upload new media"})
     
     return res.status(200).json({
