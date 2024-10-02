@@ -122,7 +122,8 @@ app.delete('/api/delete-file', async (req, res) => {
 
 app.put('/api/update',upload.single('file'),async(req,res)=>{
   try{
-    const resource = await cloudinary.api.resource(publicId, {
+    const {oldPublicId} = req.body;
+    const resource = await cloudinary.api.resource(oldPublicId, {
       resource_type: "image",
     });
 
