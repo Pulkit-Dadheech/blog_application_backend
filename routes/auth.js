@@ -43,15 +43,35 @@ router.post("/login", async (req, res) => {
       }
     );
     const { password, ...info } = user._doc;
-    res.cookie("token", token).status(200).json(info);
-  } catch (e) {
-    res.status(500).json(e);
-  }
-});
+    const isProd = process.env.NODE_ENV === 'production';
+
+
+    res.cookie("token", token, {
+      httpOnly: true,    
+      secure: isProd,  
+      sameSite: 'None', 
+      maxAge: 3 * 24 * 60 * 60 * 1000 
+    });
+
+// Send user info as JSON (excluding password)
+    res.status(200).json(info);
+    } catch (e) {
+        res.status(500).json(e);
+      }
+    });
 
 router.get("/logout", async (req, res) => {
   try {
-    res.clearCookie("token", { sameSite: "none", secure: true }).status(200).send("User logged out successfully!");
+    app.post('/logout', (req, res) => {
+      
+      const isProd = process.env.NODE_ENV === 'production';
+        
+      res.clearCookie("token", {
+        httpOnly: true,      
+        secure: isProd,      
+        sameSite: 'None'
+      }).status(200).send("User logged out successfully!");
+    });
   } catch (e) {
     res.status(500).json(e);
   }
