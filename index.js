@@ -49,7 +49,7 @@ cloudinary.config({
 //image upload
 const storage = multer.diskStorage({
   destination:(req,file,fn)=>{
-    fn(null,'images');
+    fn(null,'/tmp');
   },
   filename: (req, file, fn) => {
     // Use the filename provided in req.body.uploadedFile or default to the original name
@@ -120,7 +120,7 @@ app.put('/api/update',upload.single('file'),async(req,res)=>{
 
     const localFilePath = req.file.path; 
     const newMedia = await uploadOnCloudinary(localFilePath);
-
+    console.log(newMedia);
     if(!newMedia) return res.status(500).json({message: "Failed to upload new media"})
     
     return res.status(200).json({
